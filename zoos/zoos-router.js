@@ -29,4 +29,19 @@ router.get("/:id", async (req, res, next) => {
 	}
 })
 
+// this end point is to get a list of animals that have ever been at the zoo
+router.get('/:id/animals', async (req, res, next) => {
+	try {
+		// we're going to store the query to the zoos animal join table
+		const animals = await db('zoos_animals as za')
+			.join("zoos as z", 'z.id', 'za.zoo_id') // this joins in our zoos id
+			.join('animals as a', 'a.id', 'za.animal_id') // this joins in our animals id
+			.where('za.id', req.params.id) // we are going to select everything where the zoo id is equal to the parameter from the url
+			.select('a.*', 'za.from_date', 'za.to_date') // the select method selects everything from the animal's table and then select both dates from the join table. 
+
+			res.json(animals)
+	} catch(err){
+		next(err)
+	}
+})
 module.exports = router
