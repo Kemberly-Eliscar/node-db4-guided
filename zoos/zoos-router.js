@@ -14,8 +14,8 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
 	try {
 		const zoo = await db("zoos")
-			.where("id", req.params.id)
-			.first()
+			.where("id", req.params.id) // we are going to select everything from the zoos id
+			.first() // this selects the first id match and returns that item
 		
 		if (!zoo) {
 			return res.status(404).json({

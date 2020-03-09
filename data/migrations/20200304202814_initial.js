@@ -19,16 +19,21 @@ exports.up = async function(knex) {
       table.integer('species_id') // foreign key 
       .references('id') //this creates a reference for our foreign key pointing it to the id column
       .inTable('species') // this specifies that the id column is located in the species table 
-      .onDelete('SET NULL')
+      .onUpdate("CASCADE") // if the species id gets updated, update that change on here as well
+      .onDelete('CASCADE') // this is saying, set the foreign key to null instead of giving us an error
   });
 
   await knex.schema.createTable('zoos_animals', (table) => {
     table.integer('zoo_id')
         .references('id')
         .inTable('zoos')
+        .onUpdate("CASCADE") // if the species id gets updated, update that change on here as well
+        .onDelete('CASCADE')
     table.integer('animal_id')
         .references('id')
         .inTable('animals')
+        .onUpdate("CASCADE") // if the species id gets updated, update that change on here as well
+        .onDelete('CASCADE')
     table.date('from_date')
     table.date('to_date')
     table.primary(['zoo_id', "animal_id"])
